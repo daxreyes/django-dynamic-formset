@@ -2,7 +2,7 @@ from django import forms
 from django.forms import fields, models, formsets, widgets
 from django.contrib.admin.widgets import AdminDateWidget
 from django.conf import settings
-from example.models import Product, Order, OrderedItem
+from .models import Product, Order, OrderedItem
 
 ############################
 ## Inline Formset Example ##
@@ -29,7 +29,7 @@ class AutoCompleteOrderedItemForm(models.ModelForm):
         fields = '__all__'
 
     class Media:
-        js = ('js/jquery.autocomplete.min.js', 'js/autocomplete-init.js',)
+        js = ('js/autocomplete-init.js',)
         css = {
             'all': ('css/jquery.autocomplete.css',),
         }
@@ -86,7 +86,7 @@ class EventForm(forms.Form):
         # the widget's JS files, and the default order puts the form's
         # media AFTER that of its fields.
         media = widgets.Media(
-            js=('%sjs/core.js' % settings.ADMIN_MEDIA_PREFIX,)
+            js=('{}/admin/js/core.js'.format(settings.BASE_DIR))
         )
         media += super(EventForm, self).media
         return media
@@ -112,7 +112,7 @@ class AutoCompleteSelectFieldForm(models.ModelForm):
         fields = '__all__'
 
     class Media:
-        js = ('js/jquery.autocomplete.min.js',)
+        # js = ('js/jquery.autocomplete.min.js',)
         css = {
             'all': ('css/jquery.autocomplete.css',),
         }

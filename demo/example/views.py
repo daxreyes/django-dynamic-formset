@@ -1,5 +1,9 @@
+from django.shortcuts import render
+
+# Create your views here.
+
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.template.context import RequestContext
 from example.forms import ContactFormset, EventFormset, Order, OrderForm, get_ordereditem_formset
 from example.forms import AutoCompleteSelectFieldForm
@@ -9,11 +13,10 @@ def autocomplete_products(request):
     q = request.GET.get('q', '')
     products = Product.objects.filter(name__icontains=q).values_list('pk', 'name')
     output = u'\n'.join([u'%d|%s' % tuple(product) for product in products])
-    return HttpResponse(output, mimetype='text/plain')
+    return HttpResponse(output, content_type='text/plain')
 
 def display_data(request, data, **kwargs):
-    return render_to_response('example/posted-data.html', dict(data=data, **kwargs),
-        context_instance=RequestContext(request))
+    return render(request, 'example/posted-data.html', dict(data=data, **kwargs))
 
 def formset(request, formset_class, template):
     if request.method == 'POST':
@@ -23,8 +26,7 @@ def formset(request, formset_class, template):
             return display_data(request, data)
     else:
         formset = formset_class()
-    return render_to_response(template, {'formset': formset},
-        context_instance=RequestContext(request))
+    return render(request, template, {'formset': formset})
 
 def formset_with_template(request, formset_class, template):
     # If you're using a Django version older than 1.2, you won't have `formset.empty_form`;
@@ -41,8 +43,7 @@ def formset_with_template(request, formset_class, template):
         if formset.is_valid():
             data = formset.cleaned_data
             return display_data(request, data)
-    return render_to_response(template, {'form': form, 'formset': formset},
-        context_instance=RequestContext(request))
+    return render(request, template, {'form': form, 'formset': formset})
 
 def inline_formset(request, form_class, template):
     OrderedItemFormset = get_ordereditem_formset(form_class, extra=1, can_delete=True)
@@ -62,8 +63,7 @@ def inline_formset(request, form_class, template):
     else:
         form = OrderForm(instance=order)
         formset = OrderedItemFormset(instance=order)
-    return render_to_response(template, {'form': form, 'formset': formset},
-        context_instance=RequestContext(request))
+    return render(request, template, {'form': form, 'formset': formset})
 
 def multiple_formsets(request, template):
     if request.method == 'POST':
@@ -73,5 +73,4 @@ def multiple_formsets(request, template):
             return display_data(request, data, multiple_formsets=True)
     else:
         contact_formset, event_formset = ContactFormset(prefix='contact_form'), EventFormset(prefix='event_form')
-    return render_to_response(template, {'contact_formset': contact_formset, 'event_formset': event_formset},
-        context_instance=RequestContext(request))
+    return render(request, template, {'contact_formset': contact_formset, 'event_formset': event_formset})

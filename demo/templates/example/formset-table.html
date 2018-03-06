@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Basic Formset (Table layout){% endblock %}
 
@@ -14,14 +15,14 @@
 <style type="text/css">
     .add-row {
         padding-left:18px;
-        background:url({{ MEDIA_URL }}images/add.png) no-repeat left center;
+        background:url({% static 'images/add.png' %}) no-repeat left center;
     }
     .delete-row {
         float:right;
         display:block;
         margin:5px 0 0 5px;
         text-indent:-6000px;
-        background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
+        background:url({% static 'images/delete.png' %}) no-repeat left center;
         width:16px;
         height:16px;
     }
@@ -35,6 +36,7 @@
 <div>
     <div class="entry">
         <form method="post" action="">
+            {% csrf_token %}
             <table id="id_contact_info_table" border="0" cellpadding="0" cellspacing="5">
                 <thead>
                     <tr>

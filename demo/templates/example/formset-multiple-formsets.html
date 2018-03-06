@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Multiple formsets on the same page{% endblock %}
 
@@ -32,14 +33,14 @@
 <style type="text/css">
     .add-row {
         padding-left:18px;
-        background:url({{ MEDIA_URL }}images/add.png) no-repeat left center;
+        background:url({% static 'images/add.png' %}) no-repeat left center;
     }
     .delete-row {
         float:right;
         display:block;
         margin-left:4px;
         padding-left:18px;
-        background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
+        background:url({% static 'images/delete.png' %}) no-repeat left center;
     }
     .dynamic-event-form th {
         text-align:right;
@@ -56,6 +57,7 @@
 <div>
     <div class="entry">
         <form method="post" action="">
+            {% csrf_token %}
             <h2>Contact formset</h2>
             <table id="id_contact_info_table" border="0" cellpadding="0" cellspacing="5">
                 <thead>
