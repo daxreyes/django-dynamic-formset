@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import fields, models, formsets, widgets
+from django.forms import fields, models, formsets, widgets, inlineformset_factory
 from django.contrib.admin.widgets import AdminDateWidget
 from django.conf import settings
 from .models import Product, Order, OrderedItem
@@ -39,7 +39,7 @@ class AutoCompleteOrderedItemForm(models.ModelForm):
         self.fields['product'].widget = widgets.TextInput(attrs={'class': 'autocomplete-me'})
 
 def get_ordereditem_formset(form, formset=models.BaseInlineFormSet, **kwargs):
-    return models.inlineformset_factory(Order, OrderedItem, form, formset, **kwargs)
+    return inlineformset_factory(Order, OrderedItem, form, formset, **kwargs)
 
 ################################
 ## Plain 'ole Formset example ##
